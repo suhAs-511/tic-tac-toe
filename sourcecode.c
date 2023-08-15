@@ -1,69 +1,95 @@
 #include <stdio.h>
 #include <stdlib.h>
-char matrix[3][3];
-char check(void);
-void init_matrix(void);
-void get_player_move(void);
-void get_computer_move(void);
-void disp_matrix(void);
-int main(void)
-{
-char done;
-printf("This is the game of Tic Tac Toe.\n");
-printf("You will be playing against the computer.\n");
-done = ' ';
-init_matrix(); do { disp_matrix();
-get_player_move(); done = check();
-if(done!= ' ') break; get_computer_move(); done = check();
+
+// Define the board size and the symbols for the players and the empty cell
+#define N 3
+#define X 'X'
+#define O 'O'
+#define EMPTY ' '
+
+// Declare a global variable to store the board
+char board[N][N];
+
+// Initialize the board with empty cells
+void init_board() {
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      board[i][j] = EMPTY;
+    }
+  }
 }
-while(done== ' '); if(done=='X')
-printf("You won!\n");
-else printf("I won!!!!\n");
-disp_matrix(); return 0;
+
+// Display the board on the screen
+void print_board() {
+  printf("\n");
+  for (int i = 0; i < N; i++) {
+    printf(" %c | %c | %c \n", board[i][0], board[i][1], board[i][2]);
+    if (i < N - 1) {
+      printf("---+---+---\n");
+    }
+  }
+  printf("\n");
 }
-void init_matrix(void)
-{
-int i, j;
-for(i=0; i<3; i++)
-for(j=0; j<3; j++) matrix[i][j] = ' ';
+
+// Check if a cell is valid and empty
+int is_valid(int x, int y) {
+  if (x < 0 || x >= N || y < 0 || y >= N) {
+    return 0; // out of bounds
+  }
+  if (board[x][y] != EMPTY) {
+    return 0; // already occupied
+  }
+  return 1; // valid and empty
 }
-void get_player_move(void)
-{
-int x, y;
- printf("Enter X,Y coordinates for your move: "); scanf("%d%*c%d", &x, &y);
-x--; y--; if(matrix[x][y]!= ' '){
- printf("Invalid move, try again.\n");
-get_player_move();
+
+// Check if the board is full
+int is_full() {
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      if (board[i][j] == EMPTY) {
+        return 0; // found an empty cell
+      }
+    }
+  }
+  return 1; // no empty cells
 }
-else matrix[x][y] = 'X';
-}
-void get_computer_move(void)
-{
-int i, j;
-for(i=0; i<3; i++){ for(j=0; j<3; j++) if(matrix[i][j]==' ') break;
-if(matrix[i][j]==' ') break;
-}
-if(i*j==9) {
-printf("draw\n"); exit(0);
-}
-else
-matrix[i][j] = 'O';
-}
-void disp_matrix(void)
-{
-int t;
-for(t=0; t<3; t++) {
-printf(" %c | %c | %c ",matrix[t][0], matrix[t][1], matrix [t][2]);
-if(t!=2) printf("\n---|---|---\n");
-}
-printf("\n");
-}
-char check(void)
-{
-int i;
-for(i=0; i<3; i++) if(matrix[i][0]==matrix[i][1] &&
-matrix[i][0]==matrix[i][2]) return matrix[i][0]; for(i=0; i<3; i++) /* check columns */ if(matrix[0][i]==matrix[1][i] && matrix[0][i]==matrix[2][i]) return matrix[0][i]; if(matrix[0][0]==matrix[1][1] && matrix[1][1]==matrix[2][2])
-return matrix[0][0]; if(matrix[0][2]==matrix[1][1] && matrix[1][1]==matrix[2][0]) return matrix[0][2];
-getch();
-return ' ';
-}
+
+// Check if a player has won by forming a line of their symbol
+int is_winner(char symbol) {
+  // check rows
+  for (int i = 0; i < N; i++) {
+    int count = 0;
+    for (int j = 0; j < N; j++) {
+      if (board[i][j] == symbol) {
+        count++;
+      }
+    }
+    if (count == N) {
+      return 1; // found a row of symbol
+    }
+  }
+
+  // check columns
+  for (int j = 0; j < N; j++) {
+    int count = 0;
+    for (int i = 0; i < N; i++) {
+      if (board[i][j] == symbol) {
+        count++;
+      }
+    }
+    if (count == N) {
+      return 1; // found a column of symbol
+    }
+  }
+
+  // check diagonals
+  int count1 = 0;
+  int count2 = 0;
+  for (int i = 0; i < N; i++) {
+    if (board[i][i] == symbol) {
+      count1++;
+    }
+    if (board[i][N - i - 1] == symbol) {
+      count2++;
+    }
+  }
