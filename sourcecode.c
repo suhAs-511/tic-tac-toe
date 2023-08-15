@@ -1,15 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 // Define the board size and the symbols for the players and the empty cell
 #define N 3
 #define X 'X'
 #define O 'O'
 #define EMPTY ' '
-
 // Declare a global variable to store the board
 char board[N][N];
-
 // Initialize the board with empty cells
 void init_board() {
   for (int i = 0; i < N; i++) {
@@ -18,7 +15,6 @@ void init_board() {
     }
   }
 }
-
 // Display the board on the screen
 void print_board() {
   printf("\n");
@@ -30,7 +26,6 @@ void print_board() {
   }
   printf("\n");
 }
-
 // Check if a cell is valid and empty
 int is_valid(int x, int y) {
   if (x < 0 || x >= N || y < 0 || y >= N) {
@@ -41,7 +36,6 @@ int is_valid(int x, int y) {
   }
   return 1; // valid and empty
 }
-
 // Check if the board is full
 int is_full() {
   for (int i = 0; i < N; i++) {
@@ -53,7 +47,6 @@ int is_full() {
   }
   return 1; // no empty cells
 }
-
 // Check if a player has won by forming a line of their symbol
 int is_winner(char symbol) {
   // check rows
@@ -68,7 +61,6 @@ int is_winner(char symbol) {
       return 1; // found a row of symbol
     }
   }
-
   // check columns
   for (int j = 0; j < N; j++) {
     int count = 0;
@@ -81,7 +73,6 @@ int is_winner(char symbol) {
       return 1; // found a column of symbol
     }
   }
-
   // check diagonals
   int count1 = 0;
   int count2 = 0;
